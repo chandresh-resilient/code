@@ -15,14 +15,14 @@ export default function GNextLogo({
   const isLight = variant === "light";
 
   return (
-    <Link href="/" className={`inline-flex items-center gap-3 group ${className}`}>
+    <Link href="/" className={`inline-flex items-center gap-3.5 group ${className}`}>
       {/* Brand Emblem */}
-      <div className="relative flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-red-600 via-orange-500 to-amber-500 shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform duration-300">
+      <div className="relative flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-red-600 via-orange-500 to-amber-500 shadow-md shadow-orange-500/25 group-hover:scale-105 transition-transform duration-300 shrink-0">
         <svg
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          className="w-6 h-6 text-white"
+          className="w-7 h-7 text-white"
         >
           {/* Stylized Shield with Fire Flame */}
           <path
@@ -46,23 +46,23 @@ export default function GNextLogo({
 
       {/* Brand Typography */}
       <div className="flex flex-col">
-        <div className="flex items-center gap-1.5 leading-none">
+        <div className="flex items-center gap-2 leading-none">
           <span
-            className={`text-2xl font-black tracking-tight ${
+            className={`text-2xl sm:text-3xl font-black tracking-tight ${
               isLight ? "text-white" : "text-slate-900"
             }`}
           >
             G-NEXT
           </span>
-          <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
-          <span className="text-[11px] font-bold uppercase tracking-widest text-orange-600 px-1.5 py-0.5 rounded bg-orange-100">
+          <span className="w-2 h-2 rounded-full bg-orange-500"></span>
+          <span className="text-xs sm:text-[13px] font-bold uppercase tracking-wider text-orange-700 px-2 py-0.5 rounded bg-orange-100">
             FIRE SAFETY
           </span>
         </div>
         {showTagline && (
           <span
-            className={`text-[9.5px] font-semibold tracking-wider uppercase mt-1 ${
-              isLight ? "text-slate-400" : "text-slate-500"
+            className={`text-[11px] sm:text-xs font-semibold tracking-wider uppercase mt-1 ${
+              isLight ? "text-slate-300" : "text-slate-600"
             }`}
           >
             A Complete Fire Safety Solution Services

@@ -118,18 +118,18 @@ export default function GalleryPage() {
   return (
     <div className="flex flex-col gap-0">
       {/* HEADER HERO */}
-      <section className="bg-slate-950 text-white py-16 md:py-24 relative overflow-hidden border-b border-slate-800">
+      <section className="bg-slate-950 text-white py-20 md:py-28 relative overflow-hidden border-b border-slate-800">
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-orange-600/15 rounded-full blur-3xl pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/20 text-orange-400 font-semibold text-xs border border-orange-500/30">
-              <Eye className="w-3.5 h-3.5" />
-              <span>Operations & Systems Showcase</span>
+          <div className="max-w-3xl space-y-5">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/20 text-orange-400 font-semibold text-xs sm:text-sm border border-orange-500/30">
+              <Eye className="w-4 h-4" />
+              <span>Operations &amp; Systems Showcase</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white">
               Equipment &amp; Drills Gallery
             </h1>
-            <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
+            <p className="text-lg sm:text-xl text-slate-200 leading-relaxed font-normal">
               Explore our turnkey installations, ISI-marked fire safety apparatus, periodic maintenance procedures, and on-site mock drills across Maharashtra.
             </p>
           </div>
@@ -137,11 +137,11 @@ export default function GalleryPage() {
       </section>
 
       {/* FILTER BUTTONS & GALLERY GRID */}
-      <section className="py-16 bg-slate-50">
+      <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Category Filter Pills */}
-          <div className="flex flex-wrap items-center gap-2 mb-10 pb-4 border-b border-slate-200">
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-500 mr-2">
+          <div className="flex flex-wrap items-center gap-2.5 mb-12 pb-5 border-b border-slate-200">
+            <div className="flex items-center gap-2 text-sm font-bold text-slate-700 mr-2">
               <Filter className="w-4 h-4" />
               <span>Filter:</span>
             </div>
@@ -157,7 +157,7 @@ export default function GalleryPage() {
                 <button
                   key={tab.id}
                   onClick={() => setFilter(tab.id)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                  className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                     isActive
                       ? "bg-slate-900 text-white shadow-md shadow-slate-900/20"
                       : "bg-white text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-100"
@@ -178,44 +178,44 @@ export default function GalleryPage() {
               >
                 {/* Visual Banner Card */}
                 <div
-                  className={`h-48 p-6 bg-gradient-to-br ${item.gradient} text-white flex flex-col justify-between relative overflow-hidden`}
+                  className={`h-52 p-7 bg-gradient-to-br ${item.gradient} text-white flex flex-col justify-between relative overflow-hidden`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white/20 backdrop-blur-sm">
+                    <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded bg-white/20 backdrop-blur-sm">
                       {item.categoryLabel}
                     </span>
-                    <span className="w-2 h-2 rounded-full bg-orange-400"></span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-orange-400"></span>
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-bold text-white leading-snug">
+                    <h3 className="text-xl font-bold text-white leading-snug">
                       {item.title}
                     </h3>
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                  <div className="space-y-2">
-                    <p className="text-xs text-slate-600 leading-relaxed">
+                <div className="p-7 flex-1 flex flex-col justify-between space-y-5">
+                  <div className="space-y-3">
+                    <p className="text-sm text-slate-600 leading-relaxed">
                       {item.desc}
                     </p>
-                    <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-[11px] text-slate-700 font-medium">
+                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs sm:text-sm text-slate-800 font-medium">
                       <span className="font-bold text-orange-600">Technical Spec: </span>
                       {item.spec}
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                     <a
                       href={`https://wa.me/918779513748?text=${encodeURIComponent(
                         `Hello G-Next, I am inquiring about equipment/service: ${item.title}`
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-orange-600 hover:text-orange-700"
+                      className="inline-flex items-center gap-2 text-sm font-bold text-orange-600 hover:text-orange-700"
                     >
-                      <MessageCircle className="w-3.5 h-3.5" />
+                      <MessageCircle className="w-4 h-4" />
                       <span>Inquire About This Setup</span>
                     </a>
                   </div>
@@ -227,18 +227,18 @@ export default function GalleryPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 bg-white border-t border-slate-200 text-center">
-        <div className="max-w-4xl mx-auto px-4 space-y-4">
-          <h3 className="text-2xl font-black text-slate-900">
+      <section className="py-20 bg-white border-t border-slate-200 text-center">
+        <div className="max-w-4xl mx-auto px-4 space-y-5">
+          <h3 className="text-3xl font-black text-slate-900">
             Need a Customized Fire Equipment Demonstration or On-Site Drill?
           </h3>
-          <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto">
+          <p className="text-base sm:text-lg text-slate-600 max-w-xl mx-auto leading-relaxed">
             We provide live demonstration fires, evacuation drills, and extinguisher handling sessions at your society premises at the lowest cost in the industry.
           </p>
-          <div className="pt-2">
+          <div className="pt-3">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-xs shadow-md shadow-orange-600/30"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-sm sm:text-base shadow-md shadow-orange-600/30"
             >
               <span>Schedule On-Site Drill</span>
               <ArrowRight className="w-4 h-4" />

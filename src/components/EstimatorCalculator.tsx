@@ -79,28 +79,28 @@ export default function EstimatorCalculator() {
   return (
     <div className="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
       {/* Header */}
-      <div className="p-6 sm:p-8 bg-gradient-to-r from-slate-900 via-slate-800 to-orange-950 text-white border-b border-orange-500/20">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/20 text-orange-400 font-semibold text-xs border border-orange-500/30 mb-3">
-          <Calculator className="w-3.5 h-3.5" />
-          <span>Interactive Scope & AMC Estimator</span>
+      <div className="p-8 sm:p-10 bg-gradient-to-r from-slate-900 via-slate-800 to-orange-950 text-white border-b border-orange-500/20">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/20 text-orange-400 font-semibold text-xs sm:text-sm border border-orange-500/30 mb-3">
+          <Calculator className="w-4 h-4" />
+          <span>Interactive Scope &amp; AMC Estimator</span>
         </div>
-        <h3 className="text-xl sm:text-2xl font-black tracking-tight">
-          Configure Your Property Fire Safety & Form B Plan
+        <h3 className="text-2xl sm:text-3xl font-black tracking-tight">
+          Configure Your Property Fire Safety &amp; Form B Plan
         </h3>
-        <p className="text-slate-300 text-xs sm:text-sm mt-1 max-w-2xl">
+        <p className="text-slate-200 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed">
           Get an immediate customized compliance assessment, mandatory requirements checklist, and direct proposal from G-Next fire engineers.
         </p>
       </div>
 
-      <div className="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="p-8 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
         {/* Left Column: Form Controls (7 cols) */}
-        <div className="lg:col-span-7 space-y-6">
+        <div className="lg:col-span-7 space-y-7">
           {/* Step 1: Building Type */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2.5">
+            <label className="block text-sm font-bold uppercase tracking-wider text-slate-800 mb-3">
               1. Select Property / Occupancy Type
             </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {BUILDING_TYPES.map((type) => {
                 const isSelected = buildingType === type.id;
                 return (
@@ -108,15 +108,15 @@ export default function EstimatorCalculator() {
                     key={type.id}
                     type="button"
                     onClick={() => setBuildingType(type.id)}
-                    className={`p-3 rounded-xl border text-left flex items-center justify-between text-xs font-semibold transition-all ${
+                    className={`p-3.5 rounded-xl border text-left flex items-center justify-between text-sm font-semibold transition-all ${
                       isSelected
-                        ? "bg-orange-50/80 border-orange-500 text-orange-900 shadow-sm"
-                        : "bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-100"
+                        ? "bg-orange-50/90 border-orange-500 text-orange-950 shadow-sm"
+                        : "bg-slate-50 border-slate-200 text-slate-800 hover:border-slate-300 hover:bg-slate-100"
                     }`}
                   >
                     <span>{type.label}</span>
                     {isSelected && (
-                      <span className="w-4 h-4 rounded-full bg-orange-600 text-white flex items-center justify-center text-[10px]">
+                      <span className="w-5 h-5 rounded-full bg-orange-600 text-white flex items-center justify-center text-xs">
                         ✓
                       </span>
                     )}
@@ -128,10 +128,10 @@ export default function EstimatorCalculator() {
 
           {/* Step 2: Building Scale / Floors */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2.5">
+            <label className="block text-sm font-bold uppercase tracking-wider text-slate-800 mb-3">
               2. Select Building Height / Elevation
             </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {HEIGHT_TIERS.map((tier) => {
                 const isSelected = heightTier === tier.id;
                 return (
@@ -139,16 +139,16 @@ export default function EstimatorCalculator() {
                     key={tier.id}
                     type="button"
                     onClick={() => setHeightTier(tier.id)}
-                    className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all ${
+                    className={`p-3.5 rounded-xl border text-left text-sm font-semibold transition-all ${
                       isSelected
-                        ? "bg-orange-50/80 border-orange-500 text-orange-900 shadow-sm"
-                        : "bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-100"
+                        ? "bg-orange-50/90 border-orange-500 text-orange-950 shadow-sm"
+                        : "bg-slate-50 border-slate-200 text-slate-800 hover:border-slate-300 hover:bg-slate-100"
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-bold">{tier.label}</span>
                       {isSelected && (
-                        <span className="w-4 h-4 rounded-full bg-orange-600 text-white flex items-center justify-center text-[10px]">
+                        <span className="w-5 h-5 rounded-full bg-orange-600 text-white flex items-center justify-center text-xs">
                           ✓
                         </span>
                       )}
@@ -161,24 +161,24 @@ export default function EstimatorCalculator() {
 
           {/* Step 3: Required Solutions */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2.5">
-              3. Choose Solutions & Services Required
+            <label className="block text-sm font-bold uppercase tracking-wider text-slate-800 mb-3">
+              3. Choose Solutions &amp; Services Required
             </label>
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {SERVICE_OPTIONS.map((srv) => {
                 const isChecked = selectedServices.includes(srv.id);
                 return (
                   <div
                     key={srv.id}
                     onClick={() => toggleService(srv.id)}
-                    className={`p-3 rounded-xl border cursor-pointer flex items-start gap-3 transition-all ${
+                    className={`p-3.5 rounded-xl border cursor-pointer flex items-start gap-3.5 transition-all ${
                       isChecked
-                        ? "bg-orange-50/50 border-orange-500/70"
+                        ? "bg-orange-50/60 border-orange-500"
                         : "bg-white border-slate-200 hover:bg-slate-50"
                     }`}
                   >
                     <div
-                      className={`mt-0.5 w-4 h-4 rounded flex items-center justify-center border text-[10px] ${
+                      className={`mt-0.5 w-5 h-5 rounded flex items-center justify-center border text-xs font-bold ${
                         isChecked
                           ? "bg-orange-600 border-orange-600 text-white"
                           : "border-slate-400 bg-white"
@@ -188,16 +188,16 @@ export default function EstimatorCalculator() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-slate-900">
+                        <span className="text-sm font-bold text-slate-900">
                           {srv.title}
                         </span>
                         {srv.recommended && (
-                          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded">
+                          <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
                             Recommended
                           </span>
                         )}
                       </div>
-                      <p className="text-[11px] text-slate-500 mt-0.5">
+                      <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
                         {srv.desc}
                       </p>
                     </div>
@@ -208,9 +208,9 @@ export default function EstimatorCalculator() {
           </div>
 
           {/* Step 4: Quick Details */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                 Premises / Society Name
               </label>
               <input
@@ -218,11 +218,11 @@ export default function EstimatorCalculator() {
                 placeholder="e.g. Lodha Siena / ABC Towers"
                 value={societyName}
                 onChange={(e) => setSocietyName(e.target.value)}
-                className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 bg-slate-50"
+                className="w-full text-sm px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 bg-slate-50"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                 Your Contact Phone / WhatsApp
               </label>
               <input
@@ -230,7 +230,7 @@ export default function EstimatorCalculator() {
                 placeholder="e.g. 9876543210"
                 value={contactNumber}
                 onChange={(e) => setContactNumber(e.target.value)}
-                className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 bg-slate-50"
+                className="w-full text-sm px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 bg-slate-50"
               />
             </div>
           </div>
@@ -238,46 +238,46 @@ export default function EstimatorCalculator() {
 
         {/* Right Column: Instant Assessment & Deliverables (5 cols) */}
         <div className="lg:col-span-5 flex flex-col justify-between">
-          <div className="p-6 rounded-2xl bg-slate-900 text-white border border-slate-800 space-y-5">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <span className="text-xs font-bold uppercase tracking-wider text-orange-400">
+          <div className="p-7 sm:p-8 rounded-3xl bg-slate-900 text-white border border-slate-800 space-y-6">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+              <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-orange-400">
                 Custom Scope Summary
               </span>
-              <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold">
+              <span className="text-xs px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold">
                 MFS Form B Ready
               </span>
             </div>
 
             <div>
-              <h4 className="text-lg font-black text-white">
+              <h4 className="text-xl sm:text-2xl font-black text-white">
                 {societyName || selectedBuildingObj?.label}
               </h4>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-sm text-slate-400 mt-1">
                 Classification: {selectedHeightObj?.label}
               </p>
             </div>
 
             {/* Mandatory Systems Checklist */}
-            <div className="space-y-2 text-xs">
-              <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wide">
+            <div className="space-y-2">
+              <span className="text-xs font-bold text-slate-300 uppercase tracking-wide">
                 Mandatory Systems Required as per NBC / Maharashtra Fire Act:
               </span>
-              <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/60 text-slate-200 text-xs leading-relaxed">
+              <div className="p-4 rounded-xl bg-slate-800/90 border border-slate-700/80 text-slate-200 text-sm leading-relaxed">
                 {selectedHeightObj?.requiredSystems}
               </div>
             </div>
 
             {/* Selected Solutions */}
-            <div className="space-y-2">
-              <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wide">
+            <div className="space-y-2.5">
+              <span className="text-xs font-bold text-slate-300 uppercase tracking-wide">
                 Selected Scope ({selectedServices.length} Solutions):
               </span>
-              <ul className="space-y-1.5 text-xs text-slate-300">
+              <ul className="space-y-2 text-sm text-slate-300">
                 {selectedServices.map((sid) => {
                   const srv = SERVICE_OPTIONS.find((s) => s.id === sid);
                   return (
-                    <li key={sid} className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-orange-400 shrink-0" />
+                    <li key={sid} className="flex items-center gap-2.5">
+                      <CheckCircle2 className="w-4 h-4 text-orange-400 shrink-0" />
                       <span>{srv?.title}</span>
                     </li>
                   );
@@ -286,33 +286,33 @@ export default function EstimatorCalculator() {
             </div>
 
             {/* Assurances */}
-            <div className="p-3 rounded-xl bg-orange-950/40 border border-orange-500/30 text-xs text-orange-200 space-y-1">
-              <p className="font-bold flex items-center gap-1.5 text-orange-300">
-                <ShieldCheck className="w-4 h-4 text-orange-400" />
+            <div className="p-4 rounded-xl bg-orange-950/40 border border-orange-500/30 text-sm text-orange-200 space-y-1.5">
+              <p className="font-bold flex items-center gap-2 text-orange-300 text-sm">
+                <ShieldCheck className="w-5 h-5 text-orange-400" />
                 Licensed Form B Guarantee
               </p>
-              <p className="text-[11px] text-slate-300 leading-tight">
-                Audited & certified under joint venture with Vijay Laxmi Fire Services (Maharashtra Fire Services Licensed Agency).
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Audited &amp; certified under joint venture with Vijay Laxmi Fire Services (Maharashtra Fire Services Licensed Agency).
               </p>
             </div>
 
             {/* Direct Action Buttons */}
-            <div className="space-y-2.5 pt-2">
+            <div className="space-y-3 pt-3">
               <a
                 href={getWhatsAppMessage()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 transition-all hover:scale-[1.01]"
+                className="flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-emerald-600/30 transition-all hover:scale-[1.01]"
               >
-                <MessageCircle className="w-4 h-4" />
+                <MessageCircle className="w-5 h-5" />
                 <span>Send Scope to WhatsApp for Official Quote</span>
               </a>
 
               <a
                 href={`tel:${COMPANY_INFO.phones[0]}`}
-                className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition-colors"
+                className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm border border-slate-700 transition-colors"
               >
-                <Phone className="w-3.5 h-3.5 text-orange-400" />
+                <Phone className="w-4 h-4 text-orange-400" />
                 <span>Call Senior Fire Engineer Directly</span>
               </a>
             </div>
