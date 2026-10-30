@@ -14,6 +14,8 @@ import {
   Building2,
   Award,
   AlertCircle,
+  Navigation,
+  ExternalLink,
 } from "lucide-react";
 import { COMPANY_INFO, SERVICES } from "@/data/companyData";
 
@@ -36,6 +38,7 @@ export default function ContactPage() {
   }>({});
 
   const [submitted, setSubmitted] = useState(false);
+  const [activeMapTab, setActiveMapTab] = useState<"pune" | "mumbai">("pune");
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const phoneInputRef = useRef<HTMLInputElement>(null);
@@ -130,6 +133,26 @@ Thank you!
     window.open(url, "_blank");
   };
 
+  const handleSendOfficialEmail = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
+
+    const subject = encodeURIComponent(
+      `[Official Fire Safety RFQ] ${formData.service} - ${formData.facilityName.trim()}`
+    );
+    const body = encodeURIComponent(
+      `Dear G-Next Fire Safety Technical Board,\n\nWe request an official proposal and survey for our facility:\n\n• Premises Name: ${formData.facilityName.trim()}\n• Contact Person: ${formData.name.trim()}\n• Phone: ${formData.phone.trim()}\n• Location: ${formData.location}\n• Service Required: ${formData.service}\n\nClient Note:\n${formData.message.trim() || "Please provide commercial proposal and Form B inspection schedule."}\n\nSincerely,\n${formData.name.trim()}`
+    );
+
+    window.location.href = `mailto:${COMPANY_INFO.email}?subject=${subject}&body=${body}`;
+  };
+
+  // Google Maps URLs
+  const puneMapEmbed = "https://maps.google.com/maps?q=Avon+Vista+Balewadi+Pune&t=&z=15&ie=UTF8&iwloc=&output=embed";
+  const mumbaiMapEmbed = "https://maps.google.com/maps?q=L%26T+Emerald+Isle+Powai+Mumbai&t=&z=15&ie=UTF8&iwloc=&output=embed";
+
   return (
     <div className="flex flex-col gap-0">
       {/* HEADER HERO */}
@@ -166,18 +189,72 @@ Thank you!
       <section className="py-20 md:py-28 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            {/* Left 5 Cols: Office Addresses, Phone & Statutory */}
+            {/* Left 5 Cols: Office Addresses, Sandeep's Direct Desk, Phone & Statutory */}
             <div className="lg:col-span-5 space-y-7">
               <div>
                 <span className="text-sm font-bold text-orange-600 uppercase tracking-wider">
-                  Our Locations
+                  Our Locations &amp; Direct Desks
                 </span>
                 <h2 className="text-3xl font-black text-slate-900 mt-1.5">
-                  Head Office &amp; Branch
+                  Head Office &amp; Engineering Team
                 </h2>
                 <p className="text-sm text-slate-600 mt-1 leading-relaxed">
                   Serving Pune, PCMC, PMRDA, MIDC, Mumbai, and surrounding industrial corridors.
                 </p>
+              </div>
+
+              {/* SPECIAL SPOTLIGHT: Sandeep Chaubey Direct Desk */}
+              <div className="p-7 rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-orange-950 text-white border border-orange-500/40 shadow-xl space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-orange-500/20 text-orange-400 border border-orange-500/30">
+                    Technical Leadership Desk
+                  </span>
+                  <Award className="w-5 h-5 text-amber-400" />
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold text-white">
+                    Sandeep Chaubey
+                  </h4>
+                  <p className="text-xs sm:text-sm font-semibold text-orange-400">
+                    Fire Safety Consultant / Auditor | NFSC Nagpur Alumnus
+                  </p>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  Direct consultation for industrial risk audits, high-rise society advisory, and complex fire engineering tenders.
+                </p>
+
+                <div className="space-y-2 pt-2 border-t border-slate-800 text-sm">
+                  <div className="flex items-center gap-2.5 text-slate-200">
+                    <Mail className="w-4 h-4 text-orange-400 shrink-0" />
+                    <span className="text-xs text-slate-400 font-medium">Direct Email:</span>
+                    <a
+                      href="mailto:gnextfiresafety@gmail.com?subject=[Direct Technical Inquiry for Sandeep Chaubey]"
+                      className="text-white font-bold hover:text-orange-400 text-xs sm:text-sm"
+                    >
+                      gnextfiresafety@gmail.com
+                    </a>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-slate-200">
+                    <Phone className="w-4 h-4 text-orange-400 shrink-0" />
+                    <span className="text-xs text-slate-400 font-medium">Direct Phone:</span>
+                    <a
+                      href="tel:+918779513748"
+                      className="text-white font-bold hover:text-orange-400 text-xs sm:text-sm"
+                    >
+                      +91 8779513748
+                    </a>
+                  </div>
+                </div>
+
+                <div className="pt-2">
+                  <a
+                    href="mailto:gnextfiresafety@gmail.com?subject=[Direct Technical Inquiry for Sandeep Chaubey]"
+                    className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-xs sm:text-sm transition-all shadow-md"
+                  >
+                    <Mail className="w-4 h-4" />
+                    <span>Email Sandeep Chaubey Directly</span>
+                  </a>
+                </div>
               </div>
 
               {/* Pune Head Office Card */}
@@ -194,14 +271,13 @@ Thank you!
                 </p>
                 <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-sm font-semibold text-slate-700">
                   <span>Coverage: Pune / PCMC / PMRDA</span>
-                  <a
-                    href="https://maps.google.com/?q=Avon+Vista+Balewadi+Pune"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-orange-600 font-bold hover:underline"
+                  <button
+                    onClick={() => setActiveMapTab("pune")}
+                    className="text-orange-600 font-bold hover:underline cursor-pointer flex items-center gap-1"
                   >
-                    View Map &rarr;
-                  </a>
+                    <span>Show on Map</span>
+                    <Navigation className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
 
@@ -219,14 +295,13 @@ Thank you!
                 </p>
                 <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-sm font-semibold text-slate-700">
                   <span>Coverage: Mumbai / Thane / Navi Mumbai</span>
-                  <a
-                    href="https://maps.google.com/?q=L%26T+Emerald+Isle+Powai+Mumbai"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-orange-600 font-bold hover:underline"
+                  <button
+                    onClick={() => setActiveMapTab("mumbai")}
+                    className="text-orange-600 font-bold hover:underline cursor-pointer flex items-center gap-1"
                   >
-                    View Map &rarr;
-                  </a>
+                    <span>Show on Map</span>
+                    <Navigation className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
 
@@ -278,8 +353,9 @@ Thank you!
               </div>
             </div>
 
-            {/* Right 7 Cols: Inquiry / Site Survey Request Form with Live Validation */}
-            <div className="lg:col-span-7">
+            {/* Right 7 Cols: Form & Interactive Map */}
+            <div className="lg:col-span-7 space-y-8">
+              {/* Request Form */}
               <div className="p-8 sm:p-12 rounded-3xl bg-white border border-slate-200 shadow-xl space-y-7">
                 <div>
                   <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-100 text-orange-800 font-bold text-xs sm:text-sm mb-2.5">
@@ -290,7 +366,7 @@ Thank you!
                     Book a Free Site Survey or Request Quotation
                   </h3>
                   <p className="text-sm text-slate-600 mt-1.5 leading-relaxed">
-                    Fill out the form below to receive a formal technical proposal and Form B compliance roadmap.
+                    Fill out the form below to receive a formal technical proposal and Form B compliance roadmap via official email or WhatsApp.
                   </p>
                 </div>
 
@@ -304,17 +380,25 @@ Thank you!
                         Thank You, {formData.name}!
                       </h4>
                       <p className="text-sm text-emerald-800 mt-1.5 max-w-md mx-auto leading-relaxed">
-                        Your inquiry for {formData.facilityName} has been recorded. Our senior fire engineer will review your requirements and call you shortly.
+                        Your inquiry for {formData.facilityName} has been recorded. Our senior fire engineer will review your requirements and respond promptly.
                       </p>
                     </div>
-                    <div className="pt-3">
+                    <div className="pt-3 flex flex-wrap justify-center gap-3">
                       <button
                         type="button"
                         onClick={handleSendWhatsApp}
                         className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 text-white font-bold text-sm hover:bg-emerald-700 shadow-md cursor-pointer"
                       >
                         <MessageCircle className="w-4 h-4" />
-                        <span>Continue to WhatsApp with this Data</span>
+                        <span>Chat on WhatsApp</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleSendOfficialEmail}
+                        className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 shadow-md cursor-pointer"
+                      >
+                        <Mail className="w-4 h-4 text-orange-400" />
+                        <span>Send via Email Client</span>
                       </button>
                     </div>
                   </div>
@@ -508,26 +592,113 @@ Thank you!
                       />
                     </div>
 
-                    <div className="pt-3 flex flex-col sm:flex-row gap-3.5">
-                      <button
-                        type="submit"
-                        className="flex-1 py-3.5 px-6 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-sm sm:text-base shadow-md shadow-orange-600/30 transition-transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
-                      >
-                        <Send className="w-4 h-4" />
-                        <span>Submit Site Survey Request</span>
-                      </button>
-
+                    {/* Both WhatsApp and Email Actions Prominently Available */}
+                    <div className="pt-3 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                       <button
                         type="button"
                         onClick={handleSendWhatsApp}
                         className="py-3.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm sm:text-base shadow-md shadow-emerald-600/30 transition-transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
                       >
-                        <MessageCircle className="w-4 h-4" />
+                        <MessageCircle className="w-5 h-5" />
                         <span>Send Direct via WhatsApp</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handleSendOfficialEmail}
+                        className="py-3.5 px-6 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm sm:text-base shadow-md shadow-slate-900/30 transition-transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+                      >
+                        <Mail className="w-5 h-5 text-orange-400" />
+                        <span>Submit RFP via Email</span>
+                      </button>
+                    </div>
+
+                    <div className="pt-1 text-center">
+                      <button
+                        type="submit"
+                        className="text-xs font-semibold text-slate-500 hover:text-slate-800 underline cursor-pointer"
+                      >
+                        Or record request on page without opening apps
                       </button>
                     </div>
                   </form>
                 )}
+              </div>
+
+              {/* INTERACTIVE GOOGLE MAPS SECTION */}
+              <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-md space-y-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <span className="text-xs font-bold text-orange-600 uppercase tracking-wider">
+                      Office Navigation &amp; Directions
+                    </span>
+                    <h4 className="text-xl font-bold text-slate-900 mt-0.5">
+                      Find Our Offices on Google Maps
+                    </h4>
+                  </div>
+
+                  {/* Tabs for Pune / Mumbai */}
+                  <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-xl">
+                    <button
+                      type="button"
+                      onClick={() => setActiveMapTab("pune")}
+                      className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        activeMapTab === "pune"
+                          ? "bg-slate-900 text-white shadow-sm"
+                          : "text-slate-700 hover:text-slate-900"
+                      }`}
+                    >
+                      Pune Head Office (Avon Vista)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveMapTab("mumbai")}
+                      className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        activeMapTab === "mumbai"
+                          ? "bg-slate-900 text-white shadow-sm"
+                          : "text-slate-700 hover:text-slate-900"
+                      }`}
+                    >
+                      Mumbai (Powai)
+                    </button>
+                  </div>
+                </div>
+
+                {/* Map Iframe */}
+                <div className="w-full h-80 rounded-2xl overflow-hidden border border-slate-200 relative bg-slate-100">
+                  <iframe
+                    title={activeMapTab === "pune" ? "Pune Head Office Map" : "Mumbai Office Map"}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    loading="lazy"
+                    allowFullScreen
+                    referrerPolicy="no-referrer-when-downgrade"
+                    src={activeMapTab === "pune" ? puneMapEmbed : mumbaiMapEmbed}
+                  />
+                </div>
+
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-600">
+                  <p>
+                    <strong className="text-slate-900">Current View:</strong>{" "}
+                    {activeMapTab === "pune"
+                      ? "Avon Vista, Patil Nagar, Balewadi, Pune - 411045"
+                      : "L&T Emerald Isle, Powai, Mumbai - 400076"}
+                  </p>
+                  <a
+                    href={
+                      activeMapTab === "pune"
+                        ? "https://maps.google.com/?q=Avon+Vista+Balewadi+Pune"
+                        : "https://maps.google.com/?q=L%26T+Emerald+Isle+Powai+Mumbai"
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 font-bold text-orange-600 hover:text-orange-700 shrink-0"
+                  >
+                    <span>Open in Google Maps App</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
