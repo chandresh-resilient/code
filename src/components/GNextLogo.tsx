@@ -61,7 +61,7 @@ export default function GNextLogo({
         </div>
         {showTagline && (
           <span
-            className={`text-[11px] sm:text-xs font-semibold tracking-wider uppercase mt-1 ${
+            className={`hidden 2xl:block text-[11px] font-semibold tracking-wider uppercase mt-1 ${
               isLight ? "text-slate-300" : "text-slate-600"
             }`}
           >
