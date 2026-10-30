@@ -35,8 +35,19 @@ export default function ContactPage() {
   };
 
   const getWhatsAppDirectLink = () => {
-    const text = `Hello G-Next Fire Safety,%0A%0AMy Name: ${formData.name}%0APremises: ${formData.facilityName}%0APhone: ${formData.phone}%0AService Required: ${formData.service}%0ALocation: ${formData.location}%0ANote: ${formData.message || "Please provide quotation & survey date"}`;
-    return `https://wa.me/918779513748?text=${text}`;
+    const message = `Hello G-Next Fire Safety,
+
+My Name: ${formData.name || "Inquirer"}
+Premises: ${formData.facilityName || "Not specified"}
+Phone: ${formData.phone || "Not specified"}
+Service Required: ${formData.service}
+Location: ${formData.location}
+Note: ${formData.message || "Please provide formal quotation and site survey schedule."}
+
+Thank you!
+“WE SERVE TO SAVE”`;
+
+    return `https://wa.me/918779513748?text=${encodeURIComponent(message)}`;
   };
 
   return (
