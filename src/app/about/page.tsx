@@ -18,15 +18,22 @@ import {
   Layers,
   MapPin,
 } from "lucide-react";
+import SandeepChaubeySpotlight from "@/components/SandeepChaubeySpotlight";
 import { COMPANY_INFO, EXPERTS, WHY_CHOOSE_US } from "@/data/companyData";
 
 export const metadata = {
-  title: "About Us | G-Next Fire Safety Solution Services",
+  title: "About Us & Leadership | Sandeep Chaubey (NFSC Nagpur) | G-Next Fire Safety",
   description:
-    "Learn about G-Next Fire Safety: Headed by an alumnus of National Fire Services College (NFSC) Nagpur. 20+ to 35+ years experience in corporate safety, fire audits, AMC, and statutory Form B certification.",
+    "G-Next Fire Safety executive leadership: Headed by Sandeep Chaubey, alumnus of National Fire Service College (NFSC) Nagpur, former Regional Head at Tata Motors, Admin & Security Head at ITC Ltd, and Fire Safety at DLF Ltd. 20+ to 35+ years of engineering mastery.",
 };
 
 export default function AboutPage() {
+  const formalRfpMailto = `mailto:${COMPANY_INFO.email}?subject=${encodeURIComponent(
+    "[Official Fire Safety RFP / Proposal Request] Corporate & Society Facility Audit"
+  )}&body=${encodeURIComponent(
+    `Dear G-Next Fire Safety Technical Board,\n\nWe would like to request an official technical fire safety proposal and site audit for our facility.\n\n• Premises Name:\n• Contact Person:\n• Contact Phone:\n• Location:\n• Requirements: [ ] Bi-Annual Form B [ ] Comprehensive Fire AMC [ ] Plant Fire Safety Audit [ ] Trained Firemen Deployment\n\nPlease send us your formal commercial proposal.\n\nSincerely,`
+  )}`;
+
   return (
     <div className="flex flex-col gap-0">
       {/* HEADER HERO */}
@@ -46,21 +53,21 @@ export default function AboutPage() {
             </p>
             <div className="pt-3 flex flex-wrap items-center gap-3.5">
               <a
+                href={formalRfpMailto}
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-sm sm:text-base transition-colors shadow-md shadow-orange-600/30 cursor-pointer"
+              >
+                <Mail className="w-4 h-4" />
+                <span>Submit Official RFP via Email</span>
+              </a>
+              <a
                 href="/gnext-profile.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-sm sm:text-base transition-colors shadow-md shadow-orange-600/30"
-              >
-                <Download className="w-4 h-4" />
-                <span>Download Firm Profile (PDF)</span>
-              </a>
-              <Link
-                href="/contact"
                 className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm sm:text-base border border-slate-700 transition-colors"
               >
-                <span>Book Site Survey</span>
-                <ArrowRight className="w-4 h-4 text-orange-400" />
-              </Link>
+                <Download className="w-4 h-4 text-orange-400" />
+                <span>Download Firm Profile (PDF)</span>
+              </a>
             </div>
           </div>
         </div>
@@ -143,24 +150,31 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* POOL OF EXPERTS (Deep-Dive Profiles) */}
-      <section id="experts" className="py-20 md:py-28 bg-slate-50 border-t border-slate-200">
+      {/* FLAGSHIP EXECUTIVE SPOTLIGHT: SANDEEP CHAUBEY */}
+      <section id="sandeep-chaubey" className="py-16 md:py-24 bg-slate-100 border-y border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SandeepChaubeySpotlight />
+        </div>
+      </section>
+
+      {/* POOL OF EXPERTS (Ashok Pote, Deepak Gangal, Anil Kumar Chaubey) */}
+      <section id="experts" className="py-20 md:py-28 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-100 text-orange-800 font-bold text-xs sm:text-sm mb-3">
               <Award className="w-4 h-4 text-orange-600" />
-              <span>Technical Leadership</span>
+              <span>Distinguished Technical Board</span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
-              Our Distinguished Pool of Experts
+              Senior Engineering Consultants &amp; Management
             </h2>
             <p className="text-slate-600 text-base sm:text-lg mt-3 leading-relaxed">
-              Headed by seasoned alumni from the National Fire Service College (NFSC) Nagpur and senior directors from India&apos;s leading automotive, chemical, and FMCG conglomerates.
+              Combining 30+ years of industrial process safety, electrical hazard engineering, and client governance across India.
             </p>
           </div>
 
           <div className="space-y-10">
-            {EXPERTS.map((expert) => (
+            {EXPERTS.filter((exp) => exp.id !== "sandeep-chaubey").map((expert) => (
               <div
                 key={expert.id}
                 id={expert.id}
@@ -169,7 +183,7 @@ export default function AboutPage() {
                 {/* Left 4 Cols: Identity & Badges */}
                 <div className="lg:col-span-4 space-y-5">
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-red-600 via-orange-500 to-amber-500 text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-orange-500/20 shrink-0">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-slate-800 to-slate-950 text-white flex items-center justify-center font-black text-2xl shadow-lg shrink-0 border border-slate-700">
                       {expert.name.charAt(0)}
                     </div>
                     <div>
@@ -192,15 +206,15 @@ export default function AboutPage() {
 
                   <div className="pt-2">
                     <a
-                      href={`https://wa.me/918779513748?text=${encodeURIComponent(
-                        `Hello G-Next, I would like to schedule a technical consultation with ${expert.name}.`
+                      href={`mailto:${COMPANY_INFO.email}?subject=${encodeURIComponent(
+                        `[Technical Consultation Request] Meeting with ${expert.name}`
+                      )}&body=${encodeURIComponent(
+                        `Dear G-Next Board,\n\nI would like to schedule a formal technical review with ${expert.name} regarding our premises fire / electrical safety.\n\nPremises Name:\nContact Phone:\nRequirement:\n\nThank you.`
                       )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 text-sm font-bold text-orange-600 hover:text-orange-700"
                     >
-                      <span>Book Consultation With {expert.name.split(" ")[0]}</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <Mail className="w-4 h-4" />
+                      <span>Send Official Inquiry to {expert.name.split(" ")[0]}</span>
                     </a>
                   </div>
                 </div>
