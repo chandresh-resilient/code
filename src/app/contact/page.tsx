@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
+import Link from "next/link";
 import {
   Phone,
   Mail,
@@ -211,13 +212,20 @@ Thank you!
                   </span>
                   <Award className="w-5 h-5 text-amber-400" />
                 </div>
-                <div>
-                  <h4 className="text-xl font-bold text-white">
-                    Sandeep Chaubey
-                  </h4>
-                  <p className="text-xs sm:text-sm font-semibold text-orange-400">
-                    Fire Safety Consultant / Auditor | NFSC Nagpur Alumnus
-                  </p>
+                <div className="flex items-center gap-4">
+                  <img
+                    src="/sandeep-chaubey.jpeg"
+                    alt="Sandeep Chaubey"
+                    className="w-14 h-14 rounded-2xl object-cover object-top border-2 border-orange-500 shadow-md shrink-0"
+                  />
+                  <div>
+                    <h4 className="text-xl font-bold text-white">
+                      Sandeep Chaubey
+                    </h4>
+                    <p className="text-xs sm:text-sm font-semibold text-orange-400">
+                      Fire Safety Consultant / Auditor | NFSC Nagpur Alumnus
+                    </p>
+                  </div>
                 </div>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                   Direct consultation for industrial risk audits, high-rise society advisory, and complex fire engineering tenders.
@@ -246,7 +254,7 @@ Thank you!
                   </div>
                 </div>
 
-                <div className="pt-2">
+                <div className="pt-2 space-y-2">
                   <a
                     href="mailto:gnextfiresafety@gmail.com?subject=[Direct Technical Inquiry for Sandeep Chaubey]"
                     className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-xs sm:text-sm transition-all shadow-md"
@@ -254,6 +262,12 @@ Thank you!
                     <Mail className="w-4 h-4" />
                     <span>Email Sandeep Chaubey Directly</span>
                   </a>
+                  <Link
+                    href="/about/experts/sandeep-chaubey"
+                    className="inline-flex items-center justify-center gap-1.5 w-full py-2 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs transition-colors"
+                  >
+                    <span>View Full Profile &amp; Credentials &rarr;</span>
+                  </Link>
                 </div>
               </div>
 

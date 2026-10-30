@@ -119,8 +119,14 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/about#experts" className="hover:text-orange-400 transition-colors">
-                  Pool of Experts (NFSC Nagpur)
+                <Link href="/about/experts" className="hover:text-orange-400 transition-colors">
+                  Our Technical Experts Board
+                </Link>
+              </li>
+              <li>
+                <Link href="/about/experts/sandeep-chaubey" className="hover:text-orange-400 text-orange-400 font-semibold transition-colors flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+                  <span>Sandeep Chaubey (More Details)</span>
                 </Link>
               </li>
               <li>

@@ -171,6 +171,21 @@ export default function AboutPage() {
             <p className="text-slate-600 text-base sm:text-lg mt-3 leading-relaxed">
               Combining 30+ years of industrial process safety, electrical hazard engineering, and client governance across India.
             </p>
+            <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
+              <Link
+                href="/about/experts/sandeep-chaubey"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-xs sm:text-sm shadow-sm transition-all"
+              >
+                <span>Sandeep Chaubey (More Details)</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+              <Link
+                href="/about/experts"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 font-bold text-xs sm:text-sm shadow-xs transition-all"
+              >
+                <span>Full Technical Board Directory &rarr;</span>
+              </Link>
+            </div>
           </div>
 
           <div className="space-y-10">

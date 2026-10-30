@@ -148,24 +148,41 @@ Sincerely,
 
         {/* Action Card: Direct Executive Connection */}
         <div className="lg:col-span-4 p-7 rounded-3xl bg-slate-900 border border-slate-800 space-y-5 flex flex-col justify-between">
-          <div className="space-y-3">
-            <span className="text-xs uppercase tracking-wider font-bold text-orange-400">
-              Formal Corporate Engagement
-            </span>
-            <h4 className="text-xl font-black text-white">
-              Consult with Sandeep Chaubey
-            </h4>
-            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-              Available for high-stakes fire risk assessments, industrial safety audits, Form B advisory, and corporate facility reviews.
-            </p>
+          <div className="flex items-center gap-4">
+            <img
+              src="/sandeep-chaubey.jpeg"
+              alt="Sandeep Chaubey"
+              className="w-16 h-16 rounded-2xl object-cover object-top border-2 border-orange-500 shadow-md shrink-0"
+            />
+            <div>
+              <span className="text-[11px] uppercase tracking-wider font-bold text-orange-400 block">
+                Technical Leadership
+              </span>
+              <h4 className="text-xl font-black text-white">
+                Sandeep Chaubey
+              </h4>
+              <p className="text-xs text-slate-400">Chief Consultant &amp; Auditor</p>
+            </div>
           </div>
 
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Available for high-stakes fire risk assessments, industrial safety audits, Form B advisory, and corporate facility reviews.
+          </p>
+
           <div className="space-y-3 pt-2">
-            <a
-              href={mailtoLink}
+            <Link
+              href="/about/experts/sandeep-chaubey"
               className="flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-sm shadow-lg shadow-orange-600/30 transition-all hover:scale-[1.02] active:scale-95"
             >
-              <Mail className="w-4 h-4" />
+              <span>More Details &amp; Credentials</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+
+            <a
+              href={mailtoLink}
+              className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs sm:text-sm border border-slate-700 transition-colors"
+            >
+              <Mail className="w-4 h-4 text-orange-400" />
               <span>Send Official Email Proposal</span>
             </a>
 
@@ -173,7 +190,7 @@ Sincerely,
               href="/gnext-profile.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition-colors"
+              className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-300 font-semibold text-xs border border-slate-800 transition-colors"
             >
               <Download className="w-4 h-4 text-orange-400" />
               <span>Download Complete Profile (PDF)</span>
