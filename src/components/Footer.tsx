@@ -18,7 +18,7 @@ import { COMPANY_INFO, SERVICES } from "@/data/companyData";
 export default function Footer() {
   return (
     <footer className="bg-slate-950 text-slate-300 pt-16 pb-10 border-t border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-[1700px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
         {/* Top Banner: Statutory & Joint Venture Assurance */}
         <div className="mb-12 p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-orange-950/40 to-slate-900 border border-orange-500/30 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-start sm:items-center gap-4">
