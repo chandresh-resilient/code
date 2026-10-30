@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import * as XLSX from "xlsx";
 import {
   Building2,
@@ -16,7 +16,7 @@ import {
   Download,
   Copy,
   FileSpreadsheet,
-  Share2,
+  AlertCircle,
 } from "lucide-react";
 import { COMPANY_INFO } from "@/data/companyData";
 
@@ -101,6 +101,16 @@ export default function EstimatorCalculator() {
   const [copied, setCopied] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
 
+  // Validation State
+  const [errors, setErrors] = useState<{
+    societyName?: string;
+    contactNumber?: string;
+    services?: string;
+  }>({});
+
+  const societyInputRef = useRef<HTMLInputElement>(null);
+  const contactInputRef = useRef<HTMLInputElement>(null);
+
   const toggleService = (id: string) => {
     if (selectedServices.includes(id)) {
       if (selectedServices.length > 1) {
@@ -109,13 +119,56 @@ export default function EstimatorCalculator() {
     } else {
       setSelectedServices([...selectedServices, id]);
     }
+    if (errors.services) {
+      setErrors((prev) => ({ ...prev, services: undefined }));
+    }
   };
 
   const selectedBuildingObj = BUILDING_TYPES.find((b) => b.id === buildingType);
   const selectedHeightObj = HEIGHT_TIERS.find((h) => h.id === heightTier);
 
+  // Validation function
+  const validateForm = (): boolean => {
+    const newErrors: {
+      societyName?: string;
+      contactNumber?: string;
+      services?: string;
+    } = {};
+
+    const cleanSociety = societyName.trim();
+    if (!cleanSociety) {
+      newErrors.societyName = "Premises / Society Name is required.";
+    } else if (cleanSociety.length < 3) {
+      newErrors.societyName = "Premises name must be at least 3 characters long.";
+    }
+
+    const cleanPhone = contactNumber.trim().replace(/[\s\-()]/g, "");
+    if (!cleanPhone) {
+      newErrors.contactNumber = "Contact phone number is required.";
+    } else if (!/^[0-9+]{10,15}$/.test(cleanPhone)) {
+      newErrors.contactNumber = "Please enter a valid 10-digit mobile number.";
+    }
+
+    if (selectedServices.length === 0) {
+      newErrors.services = "Please select at least one fire safety solution.";
+    }
+
+    setErrors(newErrors);
+
+    if (newErrors.societyName) {
+      societyInputRef.current?.focus();
+      return false;
+    }
+    if (newErrors.contactNumber) {
+      contactInputRef.current?.focus();
+      return false;
+    }
+
+    return Object.keys(newErrors).length === 0;
+  };
+
   // Generate Reference ID & Date
-  const refId = `GNEXT-EST-${(societyName || "PREMISES")
+  const refId = `GNEXT-EST-${(societyName.trim() || "PREMISES")
     .replace(/[^a-zA-Z0-9]/g, "")
     .slice(0, 4)
     .toUpperCase() || "SAFE"}-${new Date().getFullYear()}`;
@@ -127,10 +180,12 @@ export default function EstimatorCalculator() {
 
   // Build Full Plain-Text Summary
   const getFullSummaryText = () => {
-    const chosenServices = selectedServices.map((sid, idx) => {
-      const srv = SERVICE_OPTIONS.find((s) => s.id === sid);
-      return `${idx + 1}. ${srv?.title}\n   • Category: ${srv?.category}\n   • Scope: ${srv?.desc}\n   • Compliance: ${srv?.standard}`;
-    }).join("\n\n");
+    const chosenServices = selectedServices
+      .map((sid, idx) => {
+        const srv = SERVICE_OPTIONS.find((s) => s.id === sid);
+        return `${idx + 1}. ${srv?.title}\n   • Category: ${srv?.category}\n   • Scope: ${srv?.desc}\n   • Compliance: ${srv?.standard}`;
+      })
+      .join("\n\n");
 
     return `🔥 G-NEXT FIRE SAFETY SOLUTION SERVICES
 Motto: “WE SERVE TO SAVE”
@@ -145,8 +200,8 @@ Ref ID: ${refId}
 Date: ${currentDate}
 
 PREMISES & CLIENT INFORMATION:
-• Premises Name: ${societyName || "Not specified (General Request)"}
-• Contact Phone: ${contactNumber || "Not specified"}
+• Premises Name: ${societyName.trim()}
+• Contact Phone: ${contactNumber.trim()}
 • Location: ${location}
 • Occupancy Type: ${selectedBuildingObj?.label}
 • Building Height/Scale: ${selectedHeightObj?.label}
@@ -168,8 +223,13 @@ CONTACT FOR OFFICIAL PROPOSAL:
 • Email: ${COMPANY_INFO.email}`;
   };
 
-  // Safe WhatsApp URL generation with encodeURIComponent
-  const getWhatsAppMessageUrl = () => {
+  // Handle WhatsApp action with validation
+  const handleSendWhatsApp = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
+
     const servicesBulletList = selectedServices
       .map((sid) => {
         const s = SERVICE_OPTIONS.find((opt) => opt.id === sid);
@@ -181,8 +241,8 @@ CONTACT FOR OFFICIAL PROPOSAL:
 Ref: ${refId} | Date: ${currentDate}
 
 🏢 *PREMISES DETAILS:*
-• *Name:* ${societyName || "Premises"}
-• *Contact:* ${contactNumber || "Provided on call"}
+• *Name:* ${societyName.trim()}
+• *Contact:* ${contactNumber.trim()}
 • *Location:* ${location}
 • *Occupancy:* ${selectedBuildingObj?.label}
 • *Building Scale:* ${selectedHeightObj?.label}
@@ -199,16 +259,20 @@ An official Excel Estimation Sheet (.xlsx) has also been generated for our commi
 Thank you!
 “WE SERVE TO SAVE”`;
 
-    return `https://wa.me/918779513748?text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/918779513748?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
   };
 
-  // Generate & Download Real Excel (.xlsx) Spreadsheet
+  // Generate & Download Real Excel (.xlsx) Spreadsheet with validation
   const handleDownloadExcel = () => {
+    if (!validateForm()) {
+      return;
+    }
+
     try {
       setIsExporting(true);
       const wb = XLSX.utils.book_new();
 
-      // Sheet 1: Executive Overview
       const summaryData = [
         ["G-NEXT FIRE SAFETY SOLUTION SERVICES"],
         ["“WE SERVE TO SAVE” — A Complete Fire Safety Solution Services under One Single Roof"],
@@ -220,8 +284,8 @@ Thank you!
         ["Generated Date", currentDate],
         [],
         ["1. CLIENT & PREMISES INFORMATION"],
-        ["Premises / Society Name", societyName || "General Facility Inquiry"],
-        ["Contact Person Phone", contactNumber || "Provided on inquiry"],
+        ["Premises / Society Name", societyName.trim()],
+        ["Contact Person Phone", contactNumber.trim()],
         ["Premises Location", location],
         ["Occupancy Classification", selectedBuildingObj?.label],
         ["Building Elevation / Height Scale", selectedHeightObj?.label],
@@ -233,7 +297,6 @@ Thank you!
         ["S.No", "Service Name", "Category", "Scope & Deliverables", "Governing Standard", "Selected Status"],
       ];
 
-      // Add selected services table
       selectedServices.forEach((sid, idx) => {
         const s = SERVICE_OPTIONS.find((opt) => opt.id === sid);
         summaryData.push([
@@ -246,7 +309,6 @@ Thank you!
         ]);
       });
 
-      // Add Footer & Statutory Compliance details
       summaryData.push(
         [],
         ["4. STATUTORY COMPLIANCE & LEGAL NOTICE"],
@@ -263,7 +325,6 @@ Thank you!
 
       const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
 
-      // Set column widths
       wsSummary["!cols"] = [
         { wch: 8 },
         { wch: 38 },
@@ -275,8 +336,8 @@ Thank you!
 
       XLSX.utils.book_append_sheet(wb, wsSummary, "Fire Safety Scope & Estimator");
 
-      // Clean file name
-      const cleanFileName = `GNext_FireSafety_Estimate_${(societyName || "Premises")
+      const cleanFileName = `GNext_FireSafety_Estimate_${societyName
+        .trim()
         .replace(/[^a-zA-Z0-9]/g, "_")
         .slice(0, 20)}_${new Date().toISOString().slice(0, 10)}.xlsx`;
 
@@ -288,8 +349,11 @@ Thank you!
     }
   };
 
-  // Copy full summary to clipboard
+  // Copy full summary to clipboard with validation
   const handleCopyClipboard = async () => {
+    if (!validateForm()) {
+      return;
+    }
     try {
       await navigator.clipboard.writeText(getFullSummaryText());
       setCopied(true);
@@ -392,9 +456,18 @@ Thank you!
 
           {/* Step 3: Required Solutions */}
           <div>
-            <label className="block text-sm font-bold uppercase tracking-wider text-slate-800 mb-3">
-              3. Choose Solutions &amp; Services Required ({selectedServices.length} Selected)
-            </label>
+            <div className="flex items-center justify-between mb-3">
+              <label className="block text-sm font-bold uppercase tracking-wider text-slate-800">
+                3. Choose Solutions &amp; Services Required ({selectedServices.length} Selected)
+              </label>
+              {errors.services && (
+                <span className="text-xs font-bold text-red-600 flex items-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5" />
+                  {errors.services}
+                </span>
+              )}
+            </div>
+
             <div className="space-y-2.5">
               {SERVICE_OPTIONS.map((srv) => {
                 const isChecked = selectedServices.includes(srv.id);
@@ -444,31 +517,64 @@ Thank you!
             </div>
           </div>
 
-          {/* Step 4: Quick Details */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          {/* Step 4: Quick Details with Validation Highlighting */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
             <div>
-              <label className="block text-sm font-bold text-slate-800 mb-1.5">
-                Premises / Society Name *
+              <label className="block text-sm font-bold text-slate-800 mb-1.5 flex items-center justify-between">
+                <span>Premises / Society Name <span className="text-red-600">*</span></span>
               </label>
               <input
+                ref={societyInputRef}
                 type="text"
                 placeholder="e.g. Lodha Siena / ABC Towers"
                 value={societyName}
-                onChange={(e) => setSocietyName(e.target.value)}
-                className="w-full text-sm px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 bg-slate-50"
+                onChange={(e) => {
+                  setSocietyName(e.target.value);
+                  if (errors.societyName) {
+                    setErrors((prev) => ({ ...prev, societyName: undefined }));
+                  }
+                }}
+                className={`w-full text-sm px-4 py-3 rounded-xl border focus:outline-none transition-colors ${
+                  errors.societyName
+                    ? "border-red-500 bg-red-50/50 focus:border-red-600"
+                    : "border-slate-300 focus:border-orange-500 bg-slate-50"
+                }`}
               />
+              {errors.societyName && (
+                <p className="text-xs font-semibold text-red-600 mt-1.5 flex items-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5" />
+                  <span>{errors.societyName}</span>
+                </p>
+              )}
             </div>
+
             <div>
-              <label className="block text-sm font-bold text-slate-800 mb-1.5">
-                Your Contact Phone / WhatsApp *
+              <label className="block text-sm font-bold text-slate-800 mb-1.5 flex items-center justify-between">
+                <span>Contact Phone / WhatsApp <span className="text-red-600">*</span></span>
               </label>
               <input
+                ref={contactInputRef}
                 type="tel"
                 placeholder="e.g. 9876543210"
                 value={contactNumber}
-                onChange={(e) => setContactNumber(e.target.value)}
-                className="w-full text-sm px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 bg-slate-50"
+                onChange={(e) => {
+                  setContactNumber(e.target.value);
+                  if (errors.contactNumber) {
+                    setErrors((prev) => ({ ...prev, contactNumber: undefined }));
+                  }
+                }}
+                className={`w-full text-sm px-4 py-3 rounded-xl border focus:outline-none transition-colors ${
+                  errors.contactNumber
+                    ? "border-red-500 bg-red-50/50 focus:border-red-600"
+                    : "border-slate-300 focus:border-orange-500 bg-slate-50"
+                }`}
               />
+              {errors.contactNumber && (
+                <p className="text-xs font-semibold text-red-600 mt-1.5 flex items-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5" />
+                  <span>{errors.contactNumber}</span>
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -487,7 +593,7 @@ Thank you!
 
             <div>
               <h4 className="text-xl sm:text-2xl font-black text-white">
-                {societyName || selectedBuildingObj?.label}
+                {societyName.trim() || selectedBuildingObj?.label}
               </h4>
               <p className="text-sm text-slate-400 mt-1">
                 Classification: {selectedHeightObj?.label}
@@ -525,6 +631,17 @@ Thank you!
               </ul>
             </div>
 
+            {/* Validation Notice Box if fields missing */}
+            {(errors.societyName || errors.contactNumber) && (
+              <div className="p-4 rounded-2xl bg-red-950/60 border border-red-500/50 text-red-200 text-xs sm:text-sm space-y-1 animate-in fade-in">
+                <p className="font-bold flex items-center gap-1.5 text-red-300">
+                  <AlertCircle className="w-4 h-4 text-red-400" />
+                  Required Information Missing
+                </p>
+                <p>Please enter your Premises Name and Contact Phone before exporting or submitting.</p>
+              </div>
+            )}
+
             {/* Excel & WhatsApp Action Box */}
             <div className="p-4 rounded-2xl bg-orange-950/40 border border-orange-500/30 text-sm text-orange-200 space-y-2">
               <p className="font-bold flex items-center gap-2 text-orange-300 text-sm">
@@ -532,7 +649,7 @@ Thank you!
                 Comprehensive Export &amp; Full Configuration
               </p>
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                You can download an official itemized <strong>Excel Sheet (.xlsx)</strong> containing all configurations, and send the full unabridged scope directly to our WhatsApp without any text truncation.
+                Download an official itemized <strong>Excel Sheet (.xlsx)</strong> containing all configurations, and send the full unabridged scope directly to our WhatsApp without any text truncation.
               </p>
             </div>
 
@@ -550,15 +667,14 @@ Thank you!
               </button>
 
               {/* Button 2: Send Full Scope to WhatsApp */}
-              <a
-                href={getWhatsAppMessageUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2.5 w-full py-3.5 px-4 rounded-xl bg-green-600 hover:bg-green-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-green-600/30 transition-all hover:scale-[1.01] active:scale-95"
+              <button
+                type="button"
+                onClick={handleSendWhatsApp}
+                className="flex items-center justify-center gap-2.5 w-full py-3.5 px-4 rounded-xl bg-green-600 hover:bg-green-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-green-600/30 transition-all hover:scale-[1.01] active:scale-95 cursor-pointer"
               >
                 <MessageCircle className="w-5 h-5" />
                 <span>Send Complete Scope to WhatsApp</span>
-              </a>
+              </button>
 
               {/* Button 3: Copy Formatted Scope to Clipboard */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">

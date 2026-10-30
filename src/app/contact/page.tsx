@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Phone,
   Mail,
@@ -13,6 +13,7 @@ import {
   CheckCircle2,
   Building2,
   Award,
+  AlertCircle,
 } from "lucide-react";
 import { COMPANY_INFO, SERVICES } from "@/data/companyData";
 
@@ -27,27 +28,106 @@ export default function ContactPage() {
     message: "",
   });
 
+  const [errors, setErrors] = useState<{
+    name?: string;
+    phone?: string;
+    facilityName?: string;
+    email?: string;
+  }>({});
+
   const [submitted, setSubmitted] = useState(false);
+
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const phoneInputRef = useRef<HTMLInputElement>(null);
+  const facilityInputRef = useRef<HTMLInputElement>(null);
+
+  const validateForm = (): boolean => {
+    const newErrors: {
+      name?: string;
+      phone?: string;
+      facilityName?: string;
+      email?: string;
+    } = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Full name is required.";
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = "Name must be at least 2 characters.";
+    }
+
+    const cleanPhone = formData.phone.trim().replace(/[\s\-()]/g, "");
+    if (!cleanPhone) {
+      newErrors.phone = "Phone number is required.";
+    } else if (!/^[0-9+]{10,15}$/.test(cleanPhone)) {
+      newErrors.phone = "Please enter a valid 10-digit mobile number.";
+    }
+
+    if (!formData.facilityName.trim()) {
+      newErrors.facilityName = "Premises / Society name is required.";
+    } else if (formData.facilityName.trim().length < 3) {
+      newErrors.facilityName = "Premises name must be at least 3 characters.";
+    }
+
+    if (formData.email.trim()) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email.trim())) {
+        newErrors.email = "Please enter a valid email address.";
+      }
+    }
+
+    setErrors(newErrors);
+
+    if (newErrors.name) {
+      nameInputRef.current?.focus();
+      return false;
+    }
+    if (newErrors.phone) {
+      phoneInputRef.current?.focus();
+      return false;
+    }
+    if (newErrors.facilityName) {
+      facilityInputRef.current?.focus();
+      return false;
+    }
+
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    if (validateForm()) {
+      setSubmitted(true);
+    }
   };
 
-  const getWhatsAppDirectLink = () => {
-    const message = `Hello G-Next Fire Safety,
+  const handleSendWhatsApp = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
 
-My Name: ${formData.name || "Inquirer"}
-Premises: ${formData.facilityName || "Not specified"}
-Phone: ${formData.phone || "Not specified"}
-Service Required: ${formData.service}
-Location: ${formData.location}
-Note: ${formData.message || "Please provide formal quotation and site survey schedule."}
+    const message = `*G-NEXT FIRE SAFETY — SITE SURVEY / AUDIT INQUIRY*
+
+👤 *CONTACT PERSON:*
+• Name: ${formData.name.trim()}
+• Phone: ${formData.phone.trim()}
+• Email: ${formData.email.trim() || "Not provided"}
+
+🏢 *PREMISES DETAILS:*
+• Premises / Society: ${formData.facilityName.trim()}
+• Location: ${formData.location}
+
+🛠️ *SERVICE REQUIRED:*
+• ${formData.service}
+
+📝 *CLIENT NOTE / REQUIREMENTS:*
+${formData.message.trim() || "Please arrange site survey and provide official quotation."}
 
 Thank you!
 “WE SERVE TO SAVE”`;
 
-    return `https://wa.me/918779513748?text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/918779513748?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
   };
 
   return (
@@ -198,7 +278,7 @@ Thank you!
               </div>
             </div>
 
-            {/* Right 7 Cols: Inquiry / Site Survey Request Form */}
+            {/* Right 7 Cols: Inquiry / Site Survey Request Form with Live Validation */}
             <div className="lg:col-span-7">
               <div className="p-8 sm:p-12 rounded-3xl bg-white border border-slate-200 shadow-xl space-y-7">
                 <div>
@@ -224,90 +304,141 @@ Thank you!
                         Thank You, {formData.name}!
                       </h4>
                       <p className="text-sm text-emerald-800 mt-1.5 max-w-md mx-auto leading-relaxed">
-                        Your inquiry for {formData.facilityName || "your premises"} has been recorded. Our senior fire engineer will review your requirements and call you shortly.
+                        Your inquiry for {formData.facilityName} has been recorded. Our senior fire engineer will review your requirements and call you shortly.
                       </p>
                     </div>
                     <div className="pt-3">
-                      <a
-                        href={getWhatsAppDirectLink()}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 text-white font-bold text-sm hover:bg-emerald-700 shadow-md"
+                      <button
+                        type="button"
+                        onClick={handleSendWhatsApp}
+                        className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 text-white font-bold text-sm hover:bg-emerald-700 shadow-md cursor-pointer"
                       >
                         <MessageCircle className="w-4 h-4" />
                         <span>Continue to WhatsApp with this Data</span>
-                      </a>
+                      </button>
                     </div>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-5">
+                  <form onSubmit={handleSubmit} noValidate className="space-y-5">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div>
                         <label className="block text-sm font-bold text-slate-800 mb-1.5">
-                          Full Name *
+                          Full Name <span className="text-red-600">*</span>
                         </label>
                         <input
+                          ref={nameInputRef}
                           type="text"
-                          required
                           placeholder="e.g. Rajesh Sharma"
                           value={formData.name}
-                          onChange={(e) =>
-                            setFormData({ ...formData, name: e.target.value })
-                          }
-                          className="w-full text-sm px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 bg-slate-50"
+                          onChange={(e) => {
+                            setFormData({ ...formData, name: e.target.value });
+                            if (errors.name) {
+                              setErrors((prev) => ({ ...prev, name: undefined }));
+                            }
+                          }}
+                          className={`w-full text-sm px-4 py-3 rounded-xl border focus:outline-none transition-colors ${
+                            errors.name
+                              ? "border-red-500 bg-red-50/50 focus:border-red-600"
+                              : "border-slate-300 focus:border-orange-500 bg-slate-50"
+                          }`}
                         />
+                        {errors.name && (
+                          <p className="text-xs font-semibold text-red-600 mt-1.5 flex items-center gap-1">
+                            <AlertCircle className="w-3.5 h-3.5" />
+                            <span>{errors.name}</span>
+                          </p>
+                        )}
                       </div>
 
                       <div>
                         <label className="block text-sm font-bold text-slate-800 mb-1.5">
-                          Contact Phone Number *
+                          Contact Phone Number <span className="text-red-600">*</span>
                         </label>
                         <input
+                          ref={phoneInputRef}
                           type="tel"
-                          required
                           placeholder="e.g. 9876543210"
                           value={formData.phone}
-                          onChange={(e) =>
-                            setFormData({ ...formData, phone: e.target.value })
-                          }
-                          className="w-full text-sm px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 bg-slate-50"
+                          onChange={(e) => {
+                            setFormData({ ...formData, phone: e.target.value });
+                            if (errors.phone) {
+                              setErrors((prev) => ({ ...prev, phone: undefined }));
+                            }
+                          }}
+                          className={`w-full text-sm px-4 py-3 rounded-xl border focus:outline-none transition-colors ${
+                            errors.phone
+                              ? "border-red-500 bg-red-50/50 focus:border-red-600"
+                              : "border-slate-300 focus:border-orange-500 bg-slate-50"
+                          }`}
                         />
+                        {errors.phone && (
+                          <p className="text-xs font-semibold text-red-600 mt-1.5 flex items-center gap-1">
+                            <AlertCircle className="w-3.5 h-3.5" />
+                            <span>{errors.phone}</span>
+                          </p>
+                        )}
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div>
                         <label className="block text-sm font-bold text-slate-800 mb-1.5">
-                          Email Address
+                          Email Address (Optional)
                         </label>
                         <input
                           type="email"
                           placeholder="e.g. name@company.com"
                           value={formData.email}
-                          onChange={(e) =>
-                            setFormData({ ...formData, email: e.target.value })
-                          }
-                          className="w-full text-sm px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 bg-slate-50"
+                          onChange={(e) => {
+                            setFormData({ ...formData, email: e.target.value });
+                            if (errors.email) {
+                              setErrors((prev) => ({ ...prev, email: undefined }));
+                            }
+                          }}
+                          className={`w-full text-sm px-4 py-3 rounded-xl border focus:outline-none transition-colors ${
+                            errors.email
+                              ? "border-red-500 bg-red-50/50 focus:border-red-600"
+                              : "border-slate-300 focus:border-orange-500 bg-slate-50"
+                          }`}
                         />
+                        {errors.email && (
+                          <p className="text-xs font-semibold text-red-600 mt-1.5 flex items-center gap-1">
+                            <AlertCircle className="w-3.5 h-3.5" />
+                            <span>{errors.email}</span>
+                          </p>
+                        )}
                       </div>
 
                       <div>
                         <label className="block text-sm font-bold text-slate-800 mb-1.5">
-                          Premises / Society Name *
+                          Premises / Society Name <span className="text-red-600">*</span>
                         </label>
                         <input
+                          ref={facilityInputRef}
                           type="text"
-                          required
                           placeholder="e.g. Lodha Siena / Galaxy Industrial"
                           value={formData.facilityName}
-                          onChange={(e) =>
+                          onChange={(e) => {
                             setFormData({
                               ...formData,
                               facilityName: e.target.value,
-                            })
-                          }
-                          className="w-full text-sm px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 bg-slate-50"
+                            });
+                            if (errors.facilityName) {
+                              setErrors((prev) => ({ ...prev, facilityName: undefined }));
+                            }
+                          }}
+                          className={`w-full text-sm px-4 py-3 rounded-xl border focus:outline-none transition-colors ${
+                            errors.facilityName
+                              ? "border-red-500 bg-red-50/50 focus:border-red-600"
+                              : "border-slate-300 focus:border-orange-500 bg-slate-50"
+                          }`}
                         />
+                        {errors.facilityName && (
+                          <p className="text-xs font-semibold text-red-600 mt-1.5 flex items-center gap-1">
+                            <AlertCircle className="w-3.5 h-3.5" />
+                            <span>{errors.facilityName}</span>
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -321,7 +452,7 @@ Thank you!
                           onChange={(e) =>
                             setFormData({ ...formData, service: e.target.value })
                           }
-                          className="w-full text-sm px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 bg-slate-50"
+                          className="w-full text-sm px-4 py-3 rounded-xl border border-slate-300 focus:border-orange-500 focus:outline-none bg-slate-50"
                         >
                           <option value="Form B Statutory Certification">
                             Form B Statutory Certification
@@ -357,7 +488,7 @@ Thank you!
                           onChange={(e) =>
                             setFormData({ ...formData, location: e.target.value })
                           }
-                          className="w-full text-sm px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 bg-slate-50"
+                          className="w-full text-sm px-4 py-3 rounded-xl border border-slate-300 focus:border-orange-500 focus:outline-none bg-slate-50"
                         />
                       </div>
                     </div>
@@ -373,28 +504,27 @@ Thank you!
                         onChange={(e) =>
                           setFormData({ ...formData, message: e.target.value })
                         }
-                        className="w-full text-sm px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-orange-500 bg-slate-50"
+                        className="w-full text-sm px-4 py-3 rounded-xl border border-slate-300 focus:border-orange-500 focus:outline-none bg-slate-50"
                       />
                     </div>
 
                     <div className="pt-3 flex flex-col sm:flex-row gap-3.5">
                       <button
                         type="submit"
-                        className="flex-1 py-3.5 px-6 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-sm sm:text-base shadow-md shadow-orange-600/30 transition-transform active:scale-95 flex items-center justify-center gap-2"
+                        className="flex-1 py-3.5 px-6 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-sm sm:text-base shadow-md shadow-orange-600/30 transition-transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
                       >
                         <Send className="w-4 h-4" />
                         <span>Submit Site Survey Request</span>
                       </button>
 
-                      <a
-                        href={getWhatsAppDirectLink()}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="py-3.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm sm:text-base shadow-md shadow-emerald-600/30 transition-transform active:scale-95 flex items-center justify-center gap-2"
+                      <button
+                        type="button"
+                        onClick={handleSendWhatsApp}
+                        className="py-3.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm sm:text-base shadow-md shadow-emerald-600/30 transition-transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
                       >
                         <MessageCircle className="w-4 h-4" />
                         <span>Send Direct via WhatsApp</span>
-                      </a>
+                      </button>
                     </div>
                   </form>
                 )}
